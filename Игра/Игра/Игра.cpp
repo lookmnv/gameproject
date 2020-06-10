@@ -131,3 +131,123 @@ void vivodporyadka(int orderCubesToBeEnd[]) {//вывод порядка сто�
     for (int i = 0; i < 3; i++)
         cout << orderCubesToBeEnd[i] << "   ";
 }
+//Пишет Саида
+void selectCheck(int matrica[], int poslvidel) {//если выделен ящичек, и последний клик был не по нему, то ящик перестанет быть выделенным
+    for (int i = 0; i < 25; i++) {
+        if (matrica[i] == 4 || matrica[i] == 5 || matrica[i] == 6) {
+            if (i != poslvidel) {
+                switch (matrica[i]) {
+                case 4:
+                    matrica[i] = 1;
+                    break;
+                case 5:
+                    matrica[i] = 2;
+                    break;
+                case 6:
+                    matrica[i] = 3;
+                    break;
+                }
+            }
+        }
+    }
+}
+void determineHit(int* x, int* y, int pozx, int pozy) {//узнаем куда попали курсором
+    if ((pozx > 100.0) && (pozx < 164.0)) {
+        *x = 0;
+    }
+    if ((pozx > 184) && (pozx < 248)) {
+        *x = 1;
+    }
+    if ((pozx > 268) && (pozx < 332)) {
+        *x = 2;
+    }
+    if ((pozx > 352) && (pozx < 416)) {
+        *x = 3;
+    }
+    if ((pozx > 436) && (pozx < 500)) {
+        *x = 4;
+    }
+    if ((pozy > 100.0) && (pozy < 164.0)) {
+        *y = 0;
+    }
+    if ((pozy > 184) && (pozy < 248)) {
+        *y = 1;
+    }
+    if ((pozy > 268) && (pozy < 332)) {
+        *y = 2;
+    }
+    if ((pozy > 352) && (pozy < 416)) {
+        *y = 3;
+    }
+    if ((pozy > 436) && (pozy < 500)) {
+        *y = 4;
+    }
+}
+int main() {
+    RenderWindow window(VideoMode(600, 550), "CourseWork");
+    int field[25];//игровое поле
+    int orderCubesToBeEnd[3];
+
+    bool win = false;
+
+    //txt and sprite loading
+    Image fon;
+    fon.loadFromFile("bg-igra.png");
+    Texture fontex;
+    fontex.loadFromImage(fon);
+    Sprite fonspr;
+    fonspr.setTexture(fontex);
+    Image restartbg;
+    restartbg.loadFromFile("bg-restart.png");
+    Texture resbgtex;
+    resbgtex.loadFromImage(restartbg);
+    Sprite restartspr;
+    restartspr.setTexture(resbgtex);
+    Image buttonRest;
+    buttonRest.loadFromFile("button-restart.png");
+    Texture buttonRestTex;
+    buttonRestTex.loadFromImage(buttonRest);
+    Sprite buttonRestSpr;
+    buttonRestSpr.setTexture(buttonRestTex);
+    Image redbox;
+    redbox.loadFromFile("red.png");
+    Texture redboxtex;
+    redboxtex.loadFromImage(redbox);
+    Sprite redboxspr;
+    redboxspr.setTexture(redboxtex);
+    Image bluebox;
+    bluebox.loadFromFile("blue.png");
+    Texture blueboxtex;
+    blueboxtex.loadFromImage(bluebox);
+    Sprite blueboxspr;
+    blueboxspr.setTexture(blueboxtex);
+    Image yellowbox;
+    yellowbox.loadFromFile("yellow.png");
+    Texture yellowboxtex;
+    yellowboxtex.loadFromImage(yellowbox);
+    Sprite yellowboxspr;
+    yellowboxspr.setTexture(yellowboxtex);
+    Image blockbox;
+    blockbox.loadFromFile("block.png");
+    Texture blockboxtex;
+    blockboxtex.loadFromImage(blockbox);
+    Sprite blockboxspr;
+    blockboxspr.setTexture(blockboxtex);
+    Image bluevidelbox;
+    bluevidelbox.loadFromFile("bluevidel.png");
+    Texture bluevidelboxtex;
+    bluevidelboxtex.loadFromImage(bluevidelbox);
+    Sprite bluevidelboxspr;
+    bluevidelboxspr.setTexture(bluevidelboxtex);
+    Image yellowvidelbox;
+    yellowvidelbox.loadFromFile("yellowvidel.png");
+    Texture yellowvidelboxtex;
+    yellowvidelboxtex.loadFromImage(yellowvidelbox);
+    Sprite yellowvidelboxspr;
+    yellowvidelboxspr.setTexture(yellowvidelboxtex);
+    Image redvidelbox;
+    redvidelbox.loadFromFile("redvidel.png");
+    Texture redvidelboxtex;
+    redvidelboxtex.loadFromImage(redvidelbox);
+    Sprite redvidelboxspr;
+    redvidelboxspr.setTexture(redvidelboxtex);
