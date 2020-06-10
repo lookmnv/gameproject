@@ -478,3 +478,79 @@ int main() {
 
             }
             window.display();
+//Пишет Саида
+			if (proverka(field, stolb) == 1) {//если собраны все столбики в нужном порядке, то мы заходим в этот цикл
+				//вырисовываем бекграунд, потому что так как игра остановилась, нужно прорисовать прошлый кадр
+				window.clear();
+				window.draw(fonspr);
+				for (int i = 0; i < 25; i++) {
+					x = i % 5;
+					y = i / 5;
+
+					blueboxspr.setPosition(100 + 168 * orderCubesToBeEnd[0], 20);
+					window.draw(blueboxspr);
+
+					yellowboxspr.setPosition(100 + 168 * orderCubesToBeEnd[1], 20);
+					window.draw(yellowboxspr);
+
+					redboxspr.setPosition(100 + 168 * orderCubesToBeEnd[2], 20);
+					window.draw(redboxspr);
+					stolb[orderCubesToBeEnd[0]] = 1;
+					stolb[orderCubesToBeEnd[1]] = 2;
+					stolb[orderCubesToBeEnd[2]] = 3;
+
+					switch (field[i]) {
+					case 1:
+						blueboxspr.setPosition(100 + x * 84, 100 + y * 84);
+						window.draw(blueboxspr);
+						break;
+					case 2:
+						yellowboxspr.setPosition(100 + x * 84, 100 + y * 84);
+						window.draw(yellowboxspr);
+						break;
+					case 3:
+						redboxspr.setPosition(100 + x * 84, 100 + y * 84);
+						window.draw(redboxspr);
+						break;
+					case 9:
+						blockboxspr.setPosition(100 + x * 84, 100 + y * 84);
+						window.draw(blockboxspr);
+						break;
+					}
+				}
+
+				bool restclick = false, exit = false;
+				restartspr.setPosition(0, 0);
+				window.draw(restartspr);
+				buttonRestSpr.setPosition(225, 275);
+				window.draw(buttonRestSpr);
+				window.display();
+
+				while (restclick == false) {//ждем пока нажмут на кнопку рестарта, а потом перезапускаем игру
+					Vector2i pixelPos = Mouse::getPosition(window);
+					Vector2f pos = window.mapPixelToCoords(pixelPos);
+					system("cls");
+					Event event1;
+					while (window.pollEvent(event1)) {
+
+						if (event1.type == Event::MouseButtonPressed)
+							if (event1.key.code == Mouse::Left)
+								//если попали лкмом по спрайту кнопки, то будет перезагрузка игры
+								if (buttonRestSpr.getGlobalBounds().contains(pos.x, pos.y)) {
+									restclick = true;
+									win = false;
+									break;
+								}
+					}
+					window.clear();
+
+				}
+				if (win == false)
+					break;
+			}
+
+		}
+		selectCheck(field, indexvidel);
+	} while (win == false);
+	return 0;
+}
