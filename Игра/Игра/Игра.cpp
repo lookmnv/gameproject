@@ -251,3 +251,230 @@ int main() {
     redvidelboxtex.loadFromImage(redvidelbox);
     Sprite redvidelboxspr;
     redvidelboxspr.setTexture(redvidelboxtex);
+//Пишет Ангелина
+    do {
+
+        Event event;
+        win = false;
+        int firstSelect = 26;
+        yellowboxtex.setSmooth(true);
+        window.clear();
+        int x = 0, y = 0, countSelected = 0;
+        float dX = 0, dY = 0;
+        stolbi(orderCubesToBeEnd);
+        nullpole(field);
+        bool videl = false, otvidel = true;
+        int indexvidel;
+        int* x1 = &x, * y1 = &y;
+
+        int lastSelect = 26;
+        //пред финальное состояние, можно раскомментировать эти 6 строчек и закомментировать строчку ниже
+        /*field[0]=field[5]=field[10]=field[15]=field[20]=1;
+        field[2]=field[7]=field[12]=field[17]=field[22]=2;
+        field[4]=field[8]=field[14]=field[19]=field[24]=3;
+        orderCubesToBeEnd[0]=0;
+        orderCubesToBeEnd[1]=1;
+        orderCubesToBeEnd[2]=2;*/
+
+        arrangement(field);//случайным образом мы расставляем по полю наши кубики
+        
+        matrixShow(field);//выводим матрицу поля
+        while (window.isOpen() && win == false) {
+            Vector2i pixelPos = Mouse::getPosition(window);
+            Vector2f pos = window.mapPixelToCoords(pixelPos);
+            bool fclick = false;
+            bool picked = false;
+            while (window.pollEvent(event)) {
+                if (event.type == Event::Closed) {
+                    window.close();
+                    win = true;
+                }
+                if (event.type == Event::MouseButtonPressed)
+                    if (event.key.code == Mouse::Left) {
+                        while (fclick == false) {
+                            int modi;
+                            int divi;
+
+                            for (int i = 0; i < 25; i++) {
+                                divi = i / 5;
+                                modi = i % 5;
+                                int index;
+                                if ((pos.x > 100 + 84 * modi) && (pos.x < 100 + 84 * modi + 64) && (pos.y > 100 + 84 * divi) && (pos.y < 100 + 84 * divi + 64)) {
+
+                                    float pozx, pozy;
+
+                                    pozx = pos.x;
+                                    pozy = pos.y;
+                                    //узнаем по какому кубику мы попали
+                                    determineHit(x1, y1, pozx, pozy);
+
+                                    index = *y1 * 5 + *x1;
+                                    firstSelect = index;
+
+                                    fclick = true;
+                                    videl = true;
+                                    if (field[index] == 0 || field[index] == 9) {//если мы кликнули лкмом по заблокированному блоку или пустому, то выделение пред. блока снимется
+                                        switch (field[lastSelect]) {
+                                        case 4:
+                                            field[lastSelect] = 1;
+                                            break;
+                                        case 5:
+                                            field[lastSelect] = 2;
+                                            break;
+                                        case 6:
+                                            field[lastSelect] = 3;
+                                            break;
+                                        }
+                                    }
+                                    countSelected++;
+                                    picked = true;
+                                    if (countSelected > 1) {//если количество выделенных кубиков больше чем 1, то мы предыдущий кубик сделаем не выделенным
+                                        if (field[firstSelect] == 1 || field[firstSelect] == 2 || field[firstSelect] == 3) {
+                                            switch (field[indexvidel]) {
+                                            case 4:
+                                                field[indexvidel] = 1;
+                                                break;
+                                            case 5:
+                                                field[indexvidel] = 2;
+                                                break;
+                                            case 6:
+                                                field[indexvidel] = 3;
+                                                break;
+                                            }
+                                            countSelected = 1;
+                                        }
+                                    }
+                                }
+                                else {
+                                    fclick = true;
+                                }
+                            }
+                        }
+                    }
+                bool sclick = false, videl = false;
+                if (field[firstSelect] != 0) {//если мы ещё ничего не выделяли то, кубик, на который мы нажали выделится
+                    if (countSelected == 1)
+
+                    {
+                        indexvidel = firstSelect;
+                        switch (field[firstSelect]) {
+                        case 1:
+                            field[firstSelect] = 4;
+                            lastSelect = firstSelect;
+                            break;
+                        case 2:
+                            field[firstSelect] = 5;
+                            lastSelect = firstSelect;
+                            break;
+                        case 3:
+                            field[firstSelect] = 6;
+                            lastSelect = firstSelect;
+                            break;
+                        }
+                    }
+                }
+                if (event.type == Event::MouseButtonPressed)
+                    if (event.key.code == Mouse::Right) {
+                        if (firstSelect != 1 || firstSelect != 3 || firstSelect != 11 || firstSelect != 13 || firstSelect != 21 || firstSelect != 23) {
+
+                            int modi;
+                            int divi;
+                            for (int i = 0; i < 25; i++) {
+
+                                divi = i / 5;
+                                modi = i % 5;
+                                int index;
+                                //
+                                if ((pos.x > 100 + 84 * modi) && (pos.x < 100 + 84 * modi + 64) && (pos.y > 100 + 84 * divi) && (pos.y < 100 + 84 * divi + 64)) {
+                                    float pozx, pozy;
+                                    pozx = pos.x;
+                                    pozy = pos.y;
+                                    //узнаем по какому кубику мы попали
+                                    determineHit(x1, y1, pozx, pozy);
+                                    index = *y1 * 5 + *x1;
+
+                                    //если мы попали курсором не по заблокированному блоку и второй клик не равен первому клику, то мы передвигаем ящикек первого клика в свободное поле
+                                    if (index != firstSelect && index != 1 && index != 3 && index != 11 && index != 13 && index != 21 && index != 23) {
+                                        ModelBox(field, firstSelect, index);
+                                        sclick = true;
+                                        picked = true;
+                                        switch (field[index]) {
+                                        case 4:
+                                            field[index] = 1;
+                                            break;
+                                        case 5:
+                                            field[index] = 2;
+                                            break;
+                                        case 6:
+                                            field[index] = 3;
+                                            break;
+                                        }
+                                        videl = false;
+                                        countSelected = 1;
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+                if (picked == true) {
+                    system("cls");
+                    matrixShow(field);
+                    picked = false;
+                }
+            }
+            window.clear();
+            fonspr.setPosition(0, 0);
+            window.draw(fonspr);
+            for (int i = 0; i < 25; i++) {
+                x = i % 5;
+                y = i / 5;
+                //рисование ящичков, которые находятся выше игрового поля
+                blueboxspr.setPosition(100 + 168 * orderCubesToBeEnd[0], 20);
+                window.draw(blueboxspr);
+
+                yellowboxspr.setPosition(100 + 168 * orderCubesToBeEnd[1], 20);
+                window.draw(yellowboxspr);
+
+                redboxspr.setPosition(100 + 168 * orderCubesToBeEnd[2], 20);
+                window.draw(redboxspr);
+                ////
+
+                stolb[orderCubesToBeEnd[0]] = 1;
+                stolb[orderCubesToBeEnd[1]] = 2;
+                stolb[orderCubesToBeEnd[2]] = 3;
+                //рисование всех игровых ящичков
+                switch (field[i]) {
+                case 1:
+                    blueboxspr.setPosition(100 + x * 84, 100 + y * 84);
+                    window.draw(blueboxspr);
+                    break;
+                case 2:
+                    yellowboxspr.setPosition(100 + x * 84, 100 + y * 84);
+                    window.draw(yellowboxspr);
+                    break;
+                case 3:
+                    redboxspr.setPosition(100 + x * 84, 100 + y * 84);
+                    window.draw(redboxspr);
+                    break;
+                case 4:
+                    bluevidelboxspr.setPosition(96 + x * 84, 96 + y * 84);
+                    window.draw(bluevidelboxspr);
+                    break;
+                case 5:
+                    yellowvidelboxspr.setPosition(96 + x * 84, 96 + y * 84);
+                    window.draw(yellowvidelboxspr);
+                    break;
+                case 6:
+                    redvidelboxspr.setPosition(96 + x * 84, 96 + y * 84);
+                    window.draw(redvidelboxspr);
+                    break;
+                case 9:
+                    blockboxspr.setPosition(100 + x * 84, 100 + y * 84);
+                    window.draw(blockboxspr);
+                    break;
+                }
+
+            }
+            window.display();
