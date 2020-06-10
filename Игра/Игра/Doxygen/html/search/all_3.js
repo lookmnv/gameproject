@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['nullpole_5',['nullpole',['../_xD0_x98_xD0_xB3_xD1_x80_xD0_xB0_01_071_08_8cpp.html#a8193e5f0eca7a7c465eb5241d4639860',1,'Игра (1).cpp']]]
+  ['main_3',['main',['../_igra__1_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'Igra_1.cpp']]],
+  ['matrixshow_4',['matrixShow',['../_igra__1_8cpp.html#a489f0193c27e9ad8d5d70aa3c1ed05e7',1,'Igra_1.cpp']]],
+  ['modelbox_5',['ModelBox',['../_igra__1_8cpp.html#a826ef077acbac127f64146267fa5c623',1,'Igra_1.cpp']]]
 ];
